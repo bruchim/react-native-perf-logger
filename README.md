@@ -1,0 +1,1 @@
+# react-native-perf-logger
