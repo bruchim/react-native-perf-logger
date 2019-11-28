@@ -1,7 +1,10 @@
 # react-native-perf-logger
 
 ## background
-This library based on Parashuram's blog: [React Native Performance Playbook](http://blog.nparashuram.com/2018/11/react-native-performance-playbook-part-i.html)
+This library created to enable production measurement of your react native application.
+- In the first phase (based on Parashuram's blog: [React Native Performance Playbook](http://blog.nparashuram.com/2018/11/react-native-performance-playbook-part-i.html)) - I tried to measure the duration of app's startup time.
+- On the way, allow measurement of memory consumption, battery consumption and other footprints of your application.
+
 
 
 ## Getting started
