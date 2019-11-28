@@ -1,0 +1,33 @@
+{
+  "name": "react-native-perf-logger",
+  "title": "React Native Perf Logger",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omrib/react-native-perf-logger.git",
+    "baseUrl": "https://github.com/omrib/react-native-perf-logger"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": {
+    "name": "bruchim",
+    "email": "omribruchim@gmail.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.8.1",
+    "react-native": ">=0.59.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.8.3",
+    "react-native": "^0.59.10"
+  }
+}

@@ -32,7 +32,7 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+build/
 
 # Dependency directories
 node_modules
@@ -212,3 +212,6 @@ npm-debug.log
 # BUCK
 buck-out/
 \.buckd/
+
+yarn-error.log
+*.keystore
