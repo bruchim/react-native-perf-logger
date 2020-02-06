@@ -2,37 +2,37 @@ package com.reactnativeperflogger;
 
 import android.view.View;
 import android.view.ViewTreeObserver;
-import com.facebook.react.bridge.ReactMarker;
-import com.facebook.react.bridge.ReactMarkerConstants;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.annotation.Nullable;
+class TTIEndNotifier {
+    private final RNPerfLogger logger;
+    private final List<TTIEndListener> listeners;
 
-/**
- * A class to record the Perf metrics that are emitted by {@link ReactMarker.MarkerListener}
- */
-public class RNMarkersListener {
-
-    public void initialize() {
-        addReactMarkerListener();
+    TTIEndNotifier(@NonNull RNPerfLogger logger) {
+        this.logger = logger;
+        listeners = new ArrayList<>();
         addTTIEndListener();
     }
 
-    /**
-     * This is the main functionality of this file. It basically listens to all the events and stores
-     * them
-     */
-    private void addReactMarkerListener() {
-        ReactMarker.addListener(
+    @SuppressWarnings("WeakerAccess")
+    synchronized public void addListener(@NonNull TTIEndListener listener) {
+        listeners.add(listener);
+    }
 
-                new ReactMarker.MarkerListener() {
-                    @Override
-                    public void logMarker(ReactMarkerConstants name, @Nullable String tag, int instanceKey) {
-                        long current = System.currentTimeMillis();
-                        MarkersStore.getInstance().logCustomMarker(name.toString(), tag, instanceKey, current);
-                    }
-                });
+    @SuppressWarnings("unused")
+    synchronized public void removeListener(@NonNull TTIEndListener listener) {
+        listeners.remove(listener);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    synchronized public void removeAllListeners() {
+        listeners.clear();
     }
 
     /**
@@ -59,14 +59,18 @@ public class RNMarkersListener {
                                             @Override
                                             public boolean onPreDraw() {
                                                 view.getViewTreeObserver().removeOnPreDrawListener(this);
-                                                long current = System.currentTimeMillis();
-                                                MarkersStore.getInstance().logCustomMarker("TTI_COMPLETE", null, current);
-                                                PerfLoggerModule.getInstance().invokeTTICompleted();
+                                                logger.logCustomMarker("TTI_COMPLETE", null, System.currentTimeMillis());
+                                                notifyListeners();
                                                 return true;
                                             }
                                         });
                     }
                 });
     }
-}
 
+    synchronized private void notifyListeners() {
+        for (TTIEndListener listener : listeners) {
+            listener.ttiEnded();
+        }
+    }
+}

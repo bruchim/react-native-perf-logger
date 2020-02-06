@@ -1,33 +1,31 @@
 package com.reactnativeperflogger;
 
-import android.util.Log;
+import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
-public class PerfLoggerModule extends ReactContextBaseJavaModule {
-
-    private final ReactApplicationContext reactContext;
+public class PerfLoggerModule extends ReactContextBaseJavaModule implements TTIEndListener {
+    private final RNPerfLogger logger;
     private final ArrayList<Callback> callbackArrayList;
 
-    static private PerfLoggerModule perfLoggerModuleInstance;
-    public static PerfLoggerModule getInstance() {
-        return perfLoggerModuleInstance;
-    }
-
-    public PerfLoggerModule(ReactApplicationContext reactContext) {
+    PerfLoggerModule(@NonNull ReactApplicationContext reactContext, @NonNull RNPerfLogger logger) {
         super(reactContext);
-        this.reactContext = reactContext;
+        this.logger = logger;
         this.callbackArrayList = new ArrayList<>();
-        perfLoggerModuleInstance = this;
+        this.logger.getTTIEndNotifier().addListener(this);
     }
 
-
+    @NonNull
     @Override
     public String getName() {
         return "PerfLogger";
@@ -49,17 +47,36 @@ public class PerfLoggerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void getMarkersJSON(Promise promise) {
-        promise.resolve(MarkersStore.getInstance().getPerfRecordsJSON());
+    public void getAllMarkers(Promise promise) {
+        promise.resolve(buildJSONString(logger.getAllRecordsJSON()));
     }
 
+    @ReactMethod
+    public void getIntervalBounds(Promise promise) {
+        promise.resolve(buildJSONString(logger.getIntervalRecordsJson()));
+    }
 
-    public void invokeTTICompleted(){
-        this.callbackArrayList.forEach(new Consumer<Callback>() {
-            @Override
-            public void accept(Callback callback) {
-                callback.invoke();
-            }
-        });
+    @NonNull
+    private String buildJSONString(@NonNull JSONArray array) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("data", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object.toString();
+    }
+
+    @Override
+    public void ttiEnded() {
+        for (Callback callback : this.callbackArrayList) {
+            callback.invoke();
+        }
+    }
+
+    @ReactMethod
+    public void stopAndClear() {
+        logger.stopListening();
+        logger.clear();
     }
 }
