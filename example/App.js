@@ -20,7 +20,8 @@ export default class App extends Component<{}> {
   async componentDidMount() {
 
     PerfLogger.registerTTICompletedListener(async () => {
-      const result = await PerfLogger.getMarkersJSON();
+      const result = await PerfLogger.getAllMarkers();
+      PerfLogger.stopAndClear();
       console.log(result);
       this.setState({
         status: 'TTI completed',

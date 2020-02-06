@@ -62,9 +62,14 @@ to the imports at the top of the file
 import PerfLogger from 'react-native-perf-logger';
     PerfLogger.registerTTICompletedListener(async () => {
       const result = await PerfLogger.getMarkersJSON();
+      // you can use alternatively PerfLogger.getIntervalBounds()
+      // to get start and end time of all completed interval measurements 
       console.log(result);
-    })
+    });
   }
 ```
 3. Do whatever you want with this JSON (send to your server, send bi..)
-
+4. To force the logger stop listening to events and remove all stored data use:
+```javascript
+PerfLogger.stopAndClear();
+``` 
