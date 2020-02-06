@@ -25,18 +25,24 @@ This library created to enable production measurement of your react native appli
 #### Android
 
 1. Open up `android/app/src/main/java/[...]/MainApplication.java`
-  - Add `import com.reactnativeperflogger.PerfLoggerPackage;` to the imports at the top of the file
-    
-  - Add `new PerfLoggerPackage()` to the list returned by the `getPackages()` method
-  - Add `ReactNativePerfLogger.Initialize();` to the first line of `onCreate()` method:
+  - Add import statements
+  ```
+  import com.reactnativeperflogger.PerfLoggerPackage; 
+  import com.reactnativeperflogger.RNPerfLogger;
+  ``` 
+to the imports at the top of the file
+  - Add `private RNPerfLogger perfLogger` 
+  - Add `perfLogger = new RNPerfLogger();` to the first line of `onCreate()` method:
   ```
   @Override
   public void onCreate() {
-    ReactNativePerfLogger.Initialize();
+    perfLogger = new RNPerfLogger();
     super.onCreate();
     ...
   }
   ```
+  - Add `new PerfLoggerPackage(perfLogger)` to the list returned by the `getPackages()` method
+
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-perf-logger'

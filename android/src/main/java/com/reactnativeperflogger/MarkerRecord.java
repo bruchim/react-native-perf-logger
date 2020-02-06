@@ -2,62 +2,73 @@ package com.reactnativeperflogger;
 
 import android.os.Process;
 import android.text.TextUtils;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MarkerRecord {
-    private final long mTime;
-    private final String mName;
-    private final String mTag;
-    private final int mInstanceKey;
-    private final int mTid;
-    private final int mPid;
+    private final long time;
+    private final String name;
+    private final String tag;
+    private final int instanceKey;
+    private final int tid;
+    private final int pid;
 
+    @SuppressWarnings("unused")
     MarkerRecord(String name, String tag, int instanceKey) {
-        mTime = System.currentTimeMillis();
-        mName = name;
-        mTag = tag;
-        mInstanceKey = instanceKey;
-        mPid = Process.myPid();
-        mTid = Process.myTid();
+        time = System.currentTimeMillis();
+        this.name = name;
+        this.tag = tag;
+        this.instanceKey = instanceKey;
+        pid = Process.myPid();
+        tid = Process.myTid();
     }
 
     MarkerRecord(String name, String tag, int instanceKey, long time) {
-        mTime = time;
-        mName = name;
-        mTag = tag;
-        mInstanceKey = instanceKey;
-        mPid = Process.myPid();
-        mTid = Process.myTid();
+        this.time = time;
+        this.name = name;
+        this.tag = tag;
+        this.instanceKey = instanceKey;
+        pid = Process.myPid();
+        tid = Process.myTid();
     }
 
-    public JSONObject toJSON() {
+    String getName() {
+        return name;
+    }
+
+    long getTime() {
+        return time;
+    }
+
+    String getTag() {
+        return tag;
+    }
+
+    JSONObject toJSON() throws JSONException {
         JSONObject result = new JSONObject();
-        try {
-            result.put("time", mTime);
-            result.put("name", mName);
-            result.put("tag", mTag);
-            result.put("instanceKey", mInstanceKey);
-            result.put("pid", mPid);
-            result.put("tid", mTid);
-            return result;
-        } catch (JSONException e) {
-            return new JSONObject();
-        }
+        result.put("time", time);
+        result.put("name", name);
+        result.put("tag", tag);
+        result.put("instanceKey", instanceKey);
+        result.put("pid", pid);
+        result.put("tid", tid);
+        return result;
     }
 
+    @NonNull
     public String toString() {
         return TextUtils.join(
                 ",",
-                new String[] {
-                        Long.toString(mTime),
-                        mName,
-                        mTag,
-                        Integer.toString(mInstanceKey),
-                        Integer.toString(mTid),
-                        Integer.toString(mPid)
+                new String[]{
+                        Long.toString(time),
+                        name,
+                        tag,
+                        Integer.toString(instanceKey),
+                        Integer.toString(tid),
+                        Integer.toString(pid)
                 });
     }
 }
