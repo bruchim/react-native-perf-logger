@@ -32,11 +32,6 @@ public class PerfLoggerModule extends ReactContextBaseJavaModule implements TTIE
     }
 
     @ReactMethod
-    public void sampleMethod(String stringArgument, int numberArgument, Callback callback) {
-        callback.invoke("Received numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
-    }
-
-    @ReactMethod
     public void registerTTICompletedListener(Callback callback) {
         this.callbackArrayList.add(callback);
     }
