@@ -1,5 +1,5 @@
 package com.reactnativeperflogger;
 
 public interface TTIEndListener {
-    void ttiEnded();
+    void ttiEnded(long time);
 }

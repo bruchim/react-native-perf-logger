@@ -3,8 +3,8 @@ declare module 'react-native-perf-logger' {
     getAllMarkers(): Promise<string>;
     getIntervalBounds(): Promise<string>;
     stopAndClear(): void;
-    registerTTICompletedListener(callback: () => {}): void;
-    unregisterTTICompletedListener(callback: () => {}): void;
+    registerTTICompletedListener(callback: (time: number) => {}): void;
+    unregisterTTICompletedListener(callback: (time: number) => {}): void;
   }
 
   const perfLogger: PerfLogger;

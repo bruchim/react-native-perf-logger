@@ -60,7 +60,8 @@ to the imports at the top of the file
 
 ```javascript
 import PerfLogger from 'react-native-perf-logger';
-    PerfLogger.registerTTICompletedListener(async () => {
+    PerfLogger.registerTTICompletedListener(async (time) => {
+      console.log(`tti_complete time: ${time}`);
       const result = await PerfLogger.getMarkersJSON();
       // you can use alternatively PerfLogger.getIntervalBounds()
       // to get start and end time of all completed interval measurements 

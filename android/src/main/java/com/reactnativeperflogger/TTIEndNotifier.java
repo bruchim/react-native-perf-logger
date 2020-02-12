@@ -58,9 +58,10 @@ class TTIEndNotifier {
                                         new ViewTreeObserver.OnPreDrawListener() {
                                             @Override
                                             public boolean onPreDraw() {
+                                                long time = System.currentTimeMillis();
                                                 view.getViewTreeObserver().removeOnPreDrawListener(this);
-                                                logger.logCustomMarker("TTI_COMPLETE", null, System.currentTimeMillis());
-                                                notifyListeners();
+                                                logger.logCustomMarker("TTI_COMPLETE", null, time);
+                                                notifyListeners(time);
                                                 return true;
                                             }
                                         });
@@ -68,9 +69,9 @@ class TTIEndNotifier {
                 });
     }
 
-    synchronized private void notifyListeners() {
+    synchronized private void notifyListeners(long time) {
         for (TTIEndListener listener : listeners) {
-            listener.ttiEnded();
+            listener.ttiEnded(time);
         }
     }
 }

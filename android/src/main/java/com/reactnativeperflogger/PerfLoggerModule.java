@@ -63,9 +63,9 @@ public class PerfLoggerModule extends ReactContextBaseJavaModule implements TTIE
     }
 
     @Override
-    public void ttiEnded() {
+    public void ttiEnded(long time) {
         for (Callback callback : this.callbackArrayList) {
-            callback.invoke();
+            callback.invoke(time);
         }
     }
 
