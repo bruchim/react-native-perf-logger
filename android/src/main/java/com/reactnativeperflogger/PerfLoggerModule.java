@@ -7,6 +7,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +30,11 @@ public class PerfLoggerModule extends ReactContextBaseJavaModule implements TTIE
     @Override
     public String getName() {
         return "PerfLogger";
+    }
+
+    @ReactMethod
+    public void registerTTINativeIds(ReadableArray ids) {
+        logger.registerTTINativeIds(ids);
     }
 
     @ReactMethod

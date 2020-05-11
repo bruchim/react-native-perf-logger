@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReactMarker;
 import com.facebook.react.bridge.ReactMarkerConstants;
+import com.facebook.react.bridge.ReadableArray;
 
 import org.json.JSONArray;
 
@@ -24,6 +25,10 @@ public class RNPerfLogger implements ReactMarker.MarkerListener {
         ReactMarker.addListener(this);
         ttiEndNotifier = new TTIEndNotifier(this);
         logCustomStartMarker("Application", null, time);
+    }
+
+    void registerTTINativeIds(@NonNull ReadableArray ids) {
+        ttiEndNotifier.registerTTINativeIds(ids);
     }
 
     @SuppressWarnings("WeakerAccess")
