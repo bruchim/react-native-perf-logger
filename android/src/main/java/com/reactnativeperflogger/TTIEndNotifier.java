@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
@@ -16,6 +15,7 @@ class TTIEndNotifier {
     private final RNPerfLogger logger;
     private final List<TTIEndListener> listeners;
     private final List<ReactFindViewUtil.OnViewFoundListener> onViewFoundListeners;
+    private boolean notified;
 
     TTIEndNotifier(@NonNull RNPerfLogger logger) {
         this.logger = logger;
@@ -24,6 +24,8 @@ class TTIEndNotifier {
     }
 
     void registerTTINativeIds(@NonNull ReadableArray ids) {
+        notified = false;
+        onViewFoundListeners.clear();
         for (int i = 0; i < ids.size(); i++) {
             String id = ids.getString(i);
             if (id != null) {
@@ -47,14 +49,12 @@ class TTIEndNotifier {
         listeners.clear();
     }
 
-    private void removeViewFoundListeners(@Nullable ReactFindViewUtil.OnViewFoundListener except) {
-        for (int i = onViewFoundListeners.size() - 1; i >= 0; i--) {
+    private void removeViewFoundListeners() {
+        for (int i = 0; i < onViewFoundListeners.size(); i++) {
             ReactFindViewUtil.OnViewFoundListener listener = onViewFoundListeners.get(i);
-            if (except == null || listener != except) {
-                ReactFindViewUtil.removeViewListener(listener);
-                onViewFoundListeners.remove(i);
-            }
+            ReactFindViewUtil.removeViewListener(listener);
         }
+        onViewFoundListeners.clear();
     }
 
     /**
@@ -72,7 +72,6 @@ class TTIEndNotifier {
 
             @Override
             public void onViewFound(final View view) {
-                removeViewFoundListeners(this);
                 // Once we find the view, we also need to wait for it to be drawn
                 view.getViewTreeObserver()
                         // TODO (axe) Should be OnDrawListener instead of this
@@ -80,11 +79,14 @@ class TTIEndNotifier {
                                 new ViewTreeObserver.OnPreDrawListener() {
                                     @Override
                                     public boolean onPreDraw() {
-                                        long time = System.currentTimeMillis();
-                                        view.getViewTreeObserver().removeOnPreDrawListener(this);
-                                        removeViewFoundListeners(null);
-                                        logger.logCustomMarker(id, null, time);
-                                        notifyListeners(id, time);
+                                        if (!notified) {
+                                            notified = true;
+                                            long time = System.currentTimeMillis();
+                                            view.getViewTreeObserver().removeOnPreDrawListener(this);
+                                            removeViewFoundListeners();
+                                            logger.logCustomMarker(id, null, time);
+                                            notifyListeners(id, time);
+                                        }
                                         return true;
                                     }
                                 });
