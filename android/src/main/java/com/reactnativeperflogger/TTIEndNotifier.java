@@ -84,7 +84,7 @@ class TTIEndNotifier {
                                         view.getViewTreeObserver().removeOnPreDrawListener(this);
                                         removeViewFoundListeners(null);
                                         logger.logCustomMarker(id, null, time);
-                                        notifyListeners(time);
+                                        notifyListeners(id, time);
                                         return true;
                                     }
                                 });
@@ -94,9 +94,9 @@ class TTIEndNotifier {
         return listener;
     }
 
-    synchronized private void notifyListeners(long time) {
+    synchronized private void notifyListeners(String id, long time) {
         for (TTIEndListener listener : listeners) {
-            listener.ttiEnded(time);
+            listener.ttiEnded(id, time);
         }
     }
 }
