@@ -55,8 +55,12 @@ to the imports at the top of the file
 
 ## Usage
 
-1. Add a prop `nativeID="tti_complete"` to the last view of the first screen of your application.
-2. Register to TTI completed event, and get the JSON includes all the recorded markers:
+1. Add a prop `nativeID` to the last view of the first screen of every loading flow of your application.
+2. Register all such nativeIDs with 
+```javascript
+PerfLogger.registerTTINativeIds();
+```
+3. Register to TTI completed event, and get the JSON includes all the recorded markers:
 
 ```javascript
 import PerfLogger from 'react-native-perf-logger';
@@ -69,8 +73,8 @@ import PerfLogger from 'react-native-perf-logger';
     });
   }
 ```
-3. Do whatever you want with this JSON (send to your server, send bi..)
-4. To force the logger stop listening to events and remove all stored data use:
+4. Do whatever you want with this JSON (send to your server, send bi..)
+5. To force the logger stop listening to events and remove all stored data use:
 ```javascript
 PerfLogger.stopAndClear();
 ``` 
