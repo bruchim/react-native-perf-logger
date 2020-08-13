@@ -56,6 +56,17 @@ to the imports at the top of the file
 ## Usage
 
 1. Add a prop `nativeID` to the last view of the first screen of every loading flow of your application.
+```
+  render() {
+    return (
+      <FlatList
+        ...
+        id={'HOME_SCREEN_LIST'}
+        nativeID="tti_complete"
+      />
+    );
+  }
+```
 2. Register all such nativeIDs with 
 ```javascript
 PerfLogger.registerTTINativeIds();
@@ -67,8 +78,10 @@ import PerfLogger from 'react-native-perf-logger';
     PerfLogger.registerTTICompletedListener(async (time) => {
       console.log(`tti_complete time: ${time}`);
       const result = await PerfLogger.getMarkersJSON();
+      
       // you can use alternatively PerfLogger.getIntervalBounds()
       // to get start and end time of all completed interval measurements 
+      
       console.log(result);
     });
   }
