@@ -62,22 +62,25 @@ to the imports at the top of the file
       <FlatList
         ...
         id={'HOME_SCREEN_LIST'}
-        nativeID="tti_complete"
+        nativeID="myHomeScreen"
       />
     );
   }
 ```
 2. Register all such nativeIDs with 
 ```javascript
-PerfLogger.registerTTINativeIds();
+
+// you can register for multiple ids
+const ids = ["myHomeScreen"]; 
+PerfLogger.registerTTINativeIds(ids);
 ```
 3. Register to TTI completed event, and get the JSON includes all the recorded markers:
 
 ```javascript
 import PerfLogger from 'react-native-perf-logger';
-    PerfLogger.registerTTICompletedListener(async (time) => {
+    PerfLogger.registerTTICompletedListener(async (id: string, time: string) => {
       console.log(`tti_complete time: ${time}`);
-      const result = await PerfLogger.getMarkersJSON();
+      const result = await PerfLogger.getAllMarkers();
       
       // you can use alternatively PerfLogger.getIntervalBounds()
       // to get start and end time of all completed interval measurements 
@@ -86,7 +89,7 @@ import PerfLogger from 'react-native-perf-logger';
     });
   }
 ```
-4. Do whatever you want with this JSON (send to your server, send bi..)
+4. Do whatever you want with the result (send to your server, send bi..)
 5. To force the logger stop listening to events and remove all stored data use:
 ```javascript
 PerfLogger.stopAndClear();

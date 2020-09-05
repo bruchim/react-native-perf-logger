@@ -1,15 +1,15 @@
 {
   "name": "react-native-perf-logger",
   "title": "React Native Perf Logger",
-  "version": "2.0.0",
-  "description": "TODO",
+  "version": "2.0.1",
+  "description": "Performance Markers for react native applications",
   "main": "index.js",
   "scripts": {
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/omrib/react-native-perf-logger.git",
-    "baseUrl": "https://github.com/omrib/react-native-perf-logger"
+    "url": "git+https://github.com/bruchim/react-native-perf-logger.git",
+    "baseUrl": "https://github.com/bruchim/react-native-perf-logger"
   },
   "keywords": [
     "react-native"
