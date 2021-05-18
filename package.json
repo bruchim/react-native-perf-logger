@@ -28,8 +28,5 @@
   "devDependencies": {
     "react": "^16.8.3",
     "react-native": "^0.59.10"
-  },
-  "publishConfig": {
-    "registry": "http://npm.dev.wixpress.com"
   }
 }
